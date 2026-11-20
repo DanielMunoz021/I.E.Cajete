@@ -70,6 +70,15 @@ Sitio institucional de la Institución Educativa Cajete (iecajete.edu.co) con un
 
 **Para actualizar el sitio después:** ejecuta `npm run build` en `frontend/` y vuelve a subir el contenido de `sitio/`. Si cambió la API, sube también `privado/`, pero **nunca reemplaces `config.php` ni `uploads/`**.
 
+## Abrir el sitio completo en este computador (lo más fácil)
+
+1. En la carpeta `iecajete-web`, haz **doble clic en `INICIAR-SITIO.bat`**. Enciende la base de datos y el servidor, y abre **http://localhost:8000** con todo funcionando (portal, semilleros, destacados).
+2. Para apagarlo: **doble clic en `DETENER-SITIO.bat`**.
+
+Si abres `sitio\index.html` con doble clic y el servidor está encendido, la página salta sola a `http://localhost:8000`. Si está apagado, muestra las páginas públicas y un aviso para iniciar el `.bat`.
+
+El `.bat` muestra el sitio **compilado** (`sitio/`). Si cambias el código, ejecuta `npm run build` en `frontend/` para verlo, o usa el modo de desarrollo (abajo).
+
 ## Desarrollo local (Windows)
 
 **Requisitos:**
@@ -97,6 +106,7 @@ powershell -ExecutionPolicy Bypass -File herramientas\detener-local.ps1
 ```powershell
 php herramientas\cargar-demo.php --borrar-datos-locales
 # Admin: admin@demo.local / AdminDemo2026 · Docentes: laura@demo.local / LauraDemo2026, pedro@demo.local / PedroDemo2026
+# Usuario de pruebas estable (entra directo, sin cambiar la contraseña): pruebas@demo.local / Pruebas2026
 ```
 
 **Pruebas automáticas de la API.** Hay 124 pruebas en 5 archivos. Corren contra la base **local** y la **vacían** al empezar:

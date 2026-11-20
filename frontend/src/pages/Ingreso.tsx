@@ -4,6 +4,7 @@ import { LogIn } from 'lucide-react'
 import CabeceraPagina from '../components/CabeceraPagina'
 import { useSesion } from '../lib/sesion'
 import { mensajeDeError, SIN_SERVIDOR } from '../lib/api'
+import AvisoSinServidor from '../components/AvisoSinServidor'
 
 // /portal: inicio de sesión de docentes y administradores. No hay registro público.
 export default function Ingreso() {
@@ -37,9 +38,8 @@ export default function Ingreso() {
       </CabeceraPagina>
       <section className="contenedor py-12">
         {SIN_SERVIDOR ? (
-          <p className="mx-auto max-w-md rounded-[var(--radius-card)] bg-sky-soft p-6 text-sky-text">
-            El portal funciona cuando el sitio está publicado en el hosting (o con el servidor local). Abierto con doble clic solo se ven las páginas públicas.
-          </p>
+          <AvisoSinServidor />
+
         ) : (
           <form onSubmit={enviar} className="tarjeta mx-auto flex max-w-md flex-col gap-4 border-t-[6px] border-accent-yellow p-8" noValidate>
             <h2 className="text-2xl">Ingresar</h2>

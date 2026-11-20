@@ -7,6 +7,13 @@
       // En el hosting, las rutas relativas (img/..., docs/...) se resuelven desde la raíz del sitio,
       // aunque la URL sea /institucional/sedes. Abierto con doble clic (file://) se resuelven desde esta carpeta.
       if (location.protocol !== 'file:') document.write('<base href="/" />')
+      // Abierto con doble clic: si el servidor local está encendido (INICIAR-SITIO.bat),
+      // salta a http://localhost:8000 para que funcione todo (portal, semilleros, destacados).
+      if (location.protocol === 'file:') {
+        fetch('http://localhost:8000/api/sesion', { mode: 'no-cors', cache: 'no-store' })
+          .then(function () { location.replace('http://localhost:8000' + (location.hash.replace(/^#/, '') || '/')) })
+          .catch(function () {})
+      }
     </script>
     <meta name="description" content="Sitio oficial de la Institución Educativa Cajete, Popayán, Cauca. Ciencia · Trabajo · Virtud · Progreso." />
     <link rel="icon" type="image/png" href="favicon.png" />

@@ -18,6 +18,8 @@ $pdf = archivos_de_prueba()['pdf'];
 crear_usuario('Administración IE Cajete', 'admin@demo.local', 'AdminDemo2026', 'admin');
 $idLaura = crear_usuario('Laura Docente (demo)', 'laura@demo.local', 'LauraDemo2026', 'docente');
 $idPedro = crear_usuario('Pedro Docente (demo)', 'pedro@demo.local', 'PedroDemo2026', 'docente');
+// Usuario de pruebas estable: contraseña fija y sin cambio obligatorio (crear_usuario ya lo deja así)
+$idPruebas = crear_usuario('Usuario de Pruebas', 'pruebas@demo.local', 'Pruebas2026', 'docente');
 $admin = cliente_con_sesion('admin@demo.local', 'AdminDemo2026');
 
 function crear(Cliente $c, string $ruta, array $campos, array $archivos = []): array
@@ -30,7 +32,7 @@ function crear(Cliente $c, string $ruta, array $campos, array $archivos = []): a
     return array_values($r['json'])[0];
 }
 
-$amb = crear($admin, '/semilleros', ['nombre' => 'Ciencias Ambientales (demo)', 'descripcion' => "Semillero de ejemplo para probar el portal.\nEstudiamos el agua, el suelo y los bosques de la vereda.", 'lider_id' => $idLaura, 'docentes' => "$idLaura"], ['imagen' => $img('sede-dibujo.jpg')]);
+$amb = crear($admin, '/semilleros', ['nombre' => 'Ciencias Ambientales (demo)', 'descripcion' => "Semillero de ejemplo para probar el portal.\nEstudiamos el agua, el suelo y los bosques de la vereda.", 'lider_id' => $idLaura, 'docentes' => "$idLaura,$idPruebas"], ['imagen' => $img('sede-dibujo.jpg')]);
 $tec = crear($admin, '/semilleros', ['nombre' => 'Tecnología y Robótica (demo)', 'descripcion' => 'Semillero de ejemplo: programación y robótica con material reciclado.', 'lider_id' => $idPedro, 'docentes' => "$idPedro,$idLaura"], ['imagen' => $img('galeria/deporte.jpg')]);
 
 $p1 = crear($admin, '/proyectos', ['semillero_id' => $amb['id'], 'titulo' => 'Calidad del agua del río (demo)', 'resumen' => 'Proyecto de ejemplo: medición de pH y turbidez en tres puntos del río.', 'integrantes' => "Estudiante 1\nEstudiante 2", 'anio' => '2026', 'estado' => 'en_curso'], ['imagen' => $img('galeria/mural.jpg')]);
@@ -55,5 +57,6 @@ Datos de demostración cargados.
   Admin:    admin@demo.local / AdminDemo2026
   Docente:  laura@demo.local / LauraDemo2026   (2 semilleros; tiene 2 envíos pendientes)
   Docente:  pedro@demo.local / PedroDemo2026
+  Pruebas:  pruebas@demo.local / Pruebas2026     (entra directo, sin cambio de contraseña)
 
 TXT;

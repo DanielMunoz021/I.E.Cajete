@@ -14,7 +14,7 @@ Iniciar-BD
 
 if (-not (Puerto-Abierto $PUERTO_PHP)) {
     Write-Host "Iniciando la API PHP (puerto $PUERTO_PHP)..." -ForegroundColor Cyan
-    Start-Process -FilePath 'php' -ArgumentList '-S', "127.0.0.1:$PUERTO_PHP", 'api/index.php' -WorkingDirectory $RAIZ -WindowStyle Hidden
+    Start-Process -FilePath 'php' -ArgumentList '-S', "127.0.0.1:$PUERTO_PHP", '-t', 'sitio', 'herramientas/router-local.php' -WorkingDirectory $RAIZ -WindowStyle Hidden
 }
 
 Write-Host 'Iniciando el sitio: http://localhost:5173' -ForegroundColor Green

@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import { ArrowRight, FileText, FolderKanban, Sprout } from 'lucide-react'
 import CabeceraPagina from '../components/CabeceraPagina'
 import { api, mensajeDeError, SIN_SERVIDOR } from '../lib/api'
+import AvisoSinServidor from '../components/AvisoSinServidor'
 
 export type SemilleroPublico = {
   id: number
@@ -30,7 +31,7 @@ export default function Semilleros() {
         Los semilleros de investigación de la institución: sus proyectos y los trabajos que han producido docentes y estudiantes.
       </CabeceraPagina>
       <section className="contenedor py-14">
-        {SIN_SERVIDOR && <p className="rounded-[var(--radius-card)] bg-sky-soft p-6 text-sky-text">Los semilleros se cargan desde el servidor: ábrelos en el sitio publicado o con el servidor local.</p>}
+        {SIN_SERVIDOR && <AvisoSinServidor que="La página de semilleros" />}
         {error && <p role="alert" className="rounded-[var(--radius-card)] bg-danger-soft p-6 text-danger">{error}</p>}
         {!lista && !error && !SIN_SERVIDOR && <p className="text-muted-text" role="status">Cargando semilleros…</p>}
         {lista?.length === 0 && <p className="text-muted-text">Pronto publicaremos aquí los semilleros de investigación.</p>}

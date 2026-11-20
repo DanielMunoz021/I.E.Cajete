@@ -4,6 +4,7 @@ import { ArrowLeft, BookOpen, Download, FileText, Users } from 'lucide-react'
 import CabeceraPagina from '../components/CabeceraPagina'
 import { api, ErrorApi, mensajeDeError, SIN_SERVIDOR } from '../lib/api'
 import NoEncontrada from './NoEncontrada'
+import AvisoSinServidor from '../components/AvisoSinServidor'
 
 type Documento = { id: number; titulo: string; descripcion: string | null; fecha: string | null; url: string; tamano: number | null }
 type Proyecto = {
@@ -44,7 +45,7 @@ export default function SemilleroDetalle() {
         <Link to="/semilleros" className="mb-8 inline-flex items-center gap-2 font-semibold text-primary-dark hover:underline">
           <ArrowLeft size={18} aria-hidden="true" /> Todos los semilleros
         </Link>
-        {SIN_SERVIDOR && <p className="rounded-[var(--radius-card)] bg-sky-soft p-6 text-sky-text">Este contenido se carga desde el servidor.</p>}
+        {SIN_SERVIDOR && <AvisoSinServidor que="Esta página" />}
         {error && <p role="alert" className="rounded-[var(--radius-card)] bg-danger-soft p-6 text-danger">{error}</p>}
         {!d && !error && !SIN_SERVIDOR && <p className="text-muted-text" role="status">Cargando…</p>}
 

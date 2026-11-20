@@ -1,6 +1,8 @@
 import { Link } from 'react-router'
 import { ArrowRight, BookOpen, CalendarDays, Clock, FileText, ListChecks, UserPlus } from 'lucide-react'
-import { CIFRAS, EDICIONES, GALERIA, INSTITUCION, SENSACIONES_ESLOGAN } from '../data/sitio'
+import { CIFRAS, GALERIA, INSTITUCION, SENSACIONES_ESLOGAN } from '../data/sitio'
+import { useEdiciones } from '../lib/ediciones'
+import { Portada } from './Sensaciones'
 import { ALIADOS, DIRECTIVOS, DISTINTIVOS, FUNDACION, NIVELES, RESENA } from '../data/institucional'
 import CarruselPortada from '../components/CarruselPortada'
 import { irAContacto } from '../lib/navegacion'
@@ -22,7 +24,8 @@ const ACCESOS = [
 ]
 
 export default function Inicio() {
-  const ultima = EDICIONES[0]
+  const { ediciones } = useEdiciones()
+  const ultima = ediciones[0]
 
   return (
     <>
@@ -135,6 +138,7 @@ export default function Inicio() {
       </section>
 
       {/* SENSACIONES */}
+      {ultima && (
       <section className="mt-22 bg-yellow-soft py-18">
         <div className="contenedor flex flex-wrap items-center gap-10">
           <div className="flex min-w-0 flex-[1_1_380px] flex-col items-start gap-3.5">
@@ -142,24 +146,18 @@ export default function Inicio() {
             <h2 className="con-barra text-5xl leading-none">Sensaciones</h2>
             <p className="text-lg text-body italic">“{SENSACIONES_ESLOGAN}”</p>
             <p className="text-[17px] leading-relaxed text-body">
-              El periódico de la Institución Educativa Cajete. Ya está disponible la {ultima.nombre.toLowerCase()} ({ultima.fecha}).
+              El periódico de la Institución Educativa Cajete. Ya está disponible la {ultima.titulo.toLowerCase()} ({ultima.fechaTexto}).
             </p>
             <Link to="/sensaciones" className="btn-primario mt-1">
               Leer Sensaciones <ArrowRight size={18} aria-hidden="true" />
             </Link>
           </div>
-          <Link to="/sensaciones" className="mx-auto block w-full max-w-[320px] flex-[0_1_320px]">
-            <img
-              src={ultima.portada ?? undefined}
-              alt={`Portada de Sensaciones, ${ultima.nombre.toLowerCase()}, ${ultima.fecha}`}
-              width={744}
-              height={1024}
-              loading="lazy"
-              className="w-full rounded-[var(--radius-card)] shadow-[14px_14px_0_var(--color-accent-yellow),0_20px_44px_rgb(0_122_82/0.2)] transition-transform hover:-translate-y-1"
-            />
+          <Link to="/sensaciones" className="group mx-auto block w-full max-w-[320px] flex-[0_1_320px]" aria-label="Ir a Sensaciones">
+            <Portada edicion={ultima} grande />
           </Link>
         </div>
       </section>
+      )}
 
       {/* GALERÍA */}
       <section className="contenedor py-20">

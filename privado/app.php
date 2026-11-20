@@ -63,7 +63,14 @@ $RUTAS = [
     ['POST',   '/documentos/{id}',                 'documentos', 'ruta_documentos_editar'],
     ['DELETE', '/documentos/{id}',                 'documentos', 'ruta_documentos_eliminar'],
 
+    // Magazine Sensaciones
+    ['GET',    '/admin/ediciones',                 'sensaciones', 'ruta_ediciones_listar_admin'],
+    ['POST',   '/ediciones',                       'sensaciones', 'ruta_ediciones_crear'],
+    ['POST',   '/ediciones/{id}',                  'sensaciones', 'ruta_ediciones_editar'],
+    ['DELETE', '/ediciones/{id}',                  'sensaciones', 'ruta_ediciones_eliminar'],
+
     // Público
+    ['GET',  '/publico/ediciones',                 'sensaciones', 'ruta_publico_ediciones'],
     ['GET',  '/publico/semilleros',                'semilleros', 'ruta_publico_semilleros'],
     ['GET',  '/publico/semilleros/{slug}',         'semilleros', 'ruta_publico_semillero'],
 ];

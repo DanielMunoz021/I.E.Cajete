@@ -1,12 +1,19 @@
+import { useState } from 'react'
 import { BookOpen, Download } from 'lucide-react'
-import { EDICIONES, SENSACIONES_ESLOGAN, SENSACIONES_INTRO } from '../data/sitio'
+import { SENSACIONES_ESLOGAN, SENSACIONES_INTRO } from '../data/sitio'
+import { useEdiciones, type EdicionSensaciones } from '../lib/ediciones'
+import VisorPdf from '../components/VisorPdf'
+
+const descarga = (pdf: string) => (pdf.startsWith('api/') ? `${pdf}?descargar=1` : pdf)
 
 export default function Sensaciones() {
-  const [ultima, ...anteriores] = EDICIONES
+  const { ediciones, cargando } = useEdiciones()
+  const [leyendo, setLeyendo] = useState<EdicionSensaciones | null>(null)
+  const ultima = ediciones[0]
 
   return (
     <>
-      {/* Cabecera del periódico */}
+      {/* Cabecera del magazine */}
       <section className="border-b border-line bg-yellow-soft">
         <div className="contenedor flex flex-col items-center gap-3 py-14 text-center">
           <span className="font-menu text-xs font-semibold tracking-[3px] text-primary-dark uppercase">Magazine escolar · IE Cajete</span>
@@ -22,70 +29,75 @@ export default function Sensaciones() {
         </div>
       </section>
 
+      {cargando && <p className="contenedor py-14 text-muted-text" role="status">Cargando ediciones…</p>}
+
       {/* Última edición */}
-      <section className="contenedor flex flex-wrap items-start gap-12 py-16">
-        <a href={ultima.pdf} target="_blank" rel="noopener" className="mx-auto block w-full max-w-[380px] flex-[0_1_380px]">
-          <img
-            src={ultima.portada ?? undefined}
-            alt={`Portada de Sensaciones, ${ultima.nombre.toLowerCase()}, ${ultima.fecha}`}
-            width={744}
-            height={1024}
-            className="w-full rounded-[var(--radius-card)] shadow-[14px_14px_0_var(--color-accent-yellow),0_20px_44px_rgb(0_122_82/0.18)]"
-          />
-        </a>
-        <div className="flex min-w-0 flex-[1_1_480px] flex-col items-start gap-4">
-          <span className="etiqueta bg-accent-yellow">Última edición</span>
-          <h2 className="text-4xl leading-tight">
-            {ultima.nombre} · {ultima.fecha}
-          </h2>
-          <div className="flex flex-wrap gap-3">
-            <a href={ultima.pdf} target="_blank" rel="noopener" className="btn-primario">
-              <BookOpen size={18} aria-hidden="true" /> Leer en línea
-            </a>
-            <a href={ultima.pdf} download className="btn-amarillo">
-              <Download size={18} aria-hidden="true" /> Descargar PDF
-            </a>
-          </div>
-
-          <h3 className="mt-5 font-menu text-xs font-semibold tracking-[2px] text-muted-text uppercase">En esta edición</h3>
-          <ul className="w-full">
-            {ultima.articulos.map((a) => (
-              <li key={a.titulo} className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-t border-line py-3.5 last:border-b">
-                <span className="w-16 shrink-0 text-sm font-bold text-primary-dark">Pág. {a.pagina}</span>
-                <span className="flex-[1_1_220px] text-[17px] font-semibold">{a.titulo}</span>
-                {a.autor && <span className="text-sm text-muted-text">{a.autor}</span>}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* Ediciones anteriores (aparece cuando haya más de una) */}
-      {anteriores.length > 0 && (
-        <section className="contenedor pb-20">
-          <h2 className="titulo-seccion mb-7">Ediciones anteriores</h2>
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
-            {anteriores.map((e) => (
-              <a key={e.numero} href={e.pdf} target="_blank" rel="noopener" className="group flex flex-col gap-2">
-                {e.portada ? (
-                  <img src={e.portada} alt={`Portada de Sensaciones, ${e.nombre.toLowerCase()}`} width={744} height={1024} loading="lazy" className="rounded-[var(--radius-card)] shadow-[var(--shadow-soft)]" />
-                ) : (
-                  // Sin imagen de portada: portada generada con la identidad del magazine.
-                  <span className="flex aspect-[744/1024] flex-col justify-between rounded-[var(--radius-card)] border-t-8 border-accent-yellow bg-primary-dark p-4 text-white shadow-[var(--shadow-soft)] transition-transform group-hover:-translate-y-1">
-                    <span className="font-display text-2xl leading-none">Sensaciones</span>
-                    <span>
-                      <span className="block font-display text-5xl text-accent-yellow">N.º {e.numero}</span>
-                      <span className="text-sm">{e.fecha}</span>
-                    </span>
-                  </span>
-                )}
-                <span className="font-semibold">{e.nombre}</span>
-                <span className="-mt-1.5 text-sm text-muted-text">{e.fecha} · PDF</span>
-              </a>
-            ))}
+      {ultima && (
+        <section className="contenedor flex flex-wrap items-start gap-12 py-16">
+          <button type="button" onClick={() => setLeyendo(ultima)} className="mx-auto block w-full max-w-[380px] flex-[0_1_380px]" aria-label={`Leer ${ultima.titulo}`}>
+            <Portada edicion={ultima} grande />
+          </button>
+          <div className="flex min-w-0 flex-[1_1_480px] flex-col items-start gap-4">
+            <span className="etiqueta bg-accent-yellow">Última edición</span>
+            <h2 className="text-4xl leading-tight">{ultima.titulo} · {ultima.fechaTexto}</h2>
+            {ultima.descripcion && <p className="text-[17px] leading-relaxed whitespace-pre-line text-body">{ultima.descripcion}</p>}
+            <div className="flex flex-wrap gap-3">
+              <button type="button" onClick={() => setLeyendo(ultima)} className="btn-primario"><BookOpen size={18} aria-hidden="true" /> Leer aquí</button>
+              <a href={descarga(ultima.pdf)} download className="btn-amarillo"><Download size={18} aria-hidden="true" /> Descargar PDF</a>
+            </div>
           </div>
         </section>
       )}
+
+      {/* Todas las ediciones */}
+      {ediciones.length > 1 && (
+        <section className="contenedor pb-20">
+          <h2 className="titulo-seccion mb-8">Todas las ediciones</h2>
+          <ul className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
+            {ediciones.map((e) => (
+              <li key={e.id} className="flex flex-col gap-2">
+                <button type="button" onClick={() => setLeyendo(e)} className="group block text-left" aria-label={`Leer ${e.titulo}`}>
+                  <Portada edicion={e} />
+                </button>
+                <span className="font-semibold">{e.titulo}</span>
+                <span className="-mt-1.5 text-sm text-muted-text">{e.fechaTexto}</span>
+                <span className="flex flex-wrap gap-x-4 text-sm font-semibold">
+                  <button type="button" onClick={() => setLeyendo(e)} className="text-primary-dark underline">Leer</button>
+                  <a href={descarga(e.pdf)} download className="text-primary-dark underline">Descargar</a>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <VisorPdf url={leyendo?.pdf ?? null} titulo={leyendo ? `Sensaciones · ${leyendo.titulo}` : ''} onCerrar={() => setLeyendo(null)} />
     </>
+  )
+}
+
+/** Portada de la edición, o una portada generada con la identidad del magazine si no tiene imagen. */
+export function Portada({ edicion, grande = false }: { edicion: EdicionSensaciones; grande?: boolean }) {
+  const sombra = grande ? 'shadow-[14px_14px_0_var(--color-accent-yellow),0_20px_44px_rgb(0_122_82/0.18)]' : 'shadow-[var(--shadow-soft)]'
+  if (edicion.portada) {
+    return (
+      <img
+        src={edicion.portada}
+        alt={`Portada de Sensaciones, ${edicion.titulo.toLowerCase()}, ${edicion.fechaTexto}`}
+        width={744}
+        height={1024}
+        loading={grande ? undefined : 'lazy'}
+        className={`aspect-[744/1024] w-full rounded-[var(--radius-card)] object-cover transition-transform group-hover:-translate-y-1 ${sombra}`}
+      />
+    )
+  }
+  return (
+    <span className={`flex aspect-[744/1024] w-full flex-col justify-between rounded-[var(--radius-card)] border-t-8 border-accent-yellow bg-primary-dark p-4 text-left text-white transition-transform group-hover:-translate-y-1 ${sombra}`}>
+      <span className={`font-display leading-none ${grande ? 'text-4xl' : 'text-2xl'}`}>Sensaciones</span>
+      <span>
+        <span className={`block font-display text-accent-yellow ${grande ? 'text-7xl' : 'text-5xl'}`}>N.º {edicion.numero}</span>
+        <span className="text-sm">{edicion.fechaTexto}</span>
+      </span>
+    </span>
   )
 }

@@ -8,6 +8,10 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   base: './',
   plugins: [react(), tailwindcss()],
+  // En desarrollo, /api lo atiende PHP (php -S 127.0.0.1:8000 api/index.php, desde la raíz del proyecto).
+  server: {
+    proxy: { '/api': 'http://127.0.0.1:8000' },
+  },
   build: {
     outDir: '../sitio',
     emptyOutDir: true,

@@ -1,5 +1,25 @@
+# Dependencias y builds
 node_modules/
 dist/
-api/config.php
+*.tsbuildinfo
+# (sitio/ sí se versiona: es el build listo para subir al hosting)
+
+# Configuración con credenciales (nunca al repositorio)
+config.php
+privado/config.php
+.env
+.env.*
+!.env.example
+
+# Archivos subidos por usuarios (se versiona solo el .htaccess que los protege)
+/uploads/
+privado/uploads/*
+!privado/uploads/.htaccess
+
+# Datos locales de desarrollo (MariaDB portable, sesiones)
+.local/
+
+# Sistema
 *.log
 .DS_Store
+Thumbs.db

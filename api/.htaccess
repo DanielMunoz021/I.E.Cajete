@@ -1,0 +1,15 @@
+# public_html/api/.htaccess — todas las rutas /api/* las atiende index.php
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /api/
+  # instalar.php se sirve tal cual (bórralo después de crear el primer admin)
+  RewriteRule ^instalar\.php$ - [L]
+  RewriteRule ^ index.php [L,QSA]
+</IfModule>
+
+# La cabecera X-CSRF-Token debe llegar a PHP
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+</IfModule>

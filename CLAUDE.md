@@ -13,7 +13,13 @@ Todo el contenido y los comentarios van en español.
   que pone `index.html` las resuelve desde la raíz.
 - No usar enlaces `#id` para saltar dentro de la página (chocan con `#/ruta`): usar `lib/navegacion.ts`.
 - `frontend/public/.htaccess`: HTTPS forzado + fallback de la SPA, excepto `/api` y archivos reales.
-- Pendiente: API en PHP 8.3/8.4 sin framework (`api/`, PDO + JSON) y MariaDB 10.11 (`database/schema.sql`).
+- Portal Docente: API JSON en PHP 8 puro + PDO. `api/` (va en public_html/api) solo incluye `privado/app.php`;
+  la lógica, `config.php` y `uploads/` van en `privado/` (en el hosting, FUERA de public_html: iecajete-privado/).
+  Rutas en `privado/app.php` → archivos de `privado/rutas/`. Esquema en `database/schema.sql`. Despliegue: README.md.
+  - Toda consulta con `q()/fila()/filas()/valor()` (preparadas). Toda ruta que cambia datos ya pasa por `verificar_csrf()`.
+  - Cada ruta empieza con `requerir_login()` o `requerir_admin()`: el permiso se verifica en el servidor, no en la pantalla.
+  - Frontend del panel en `frontend/src/panel/` (cliente en `lib/api.ts`, sesión en `lib/sesion.tsx`).
+  - Local: `herramientas\preparar-local.ps1` (una vez) e `iniciar-local.ps1`. Pruebas: `php pruebas\fase-a.php --borrar-datos-locales`.
 - Hosting: GoDaddy Economy compartido (Apache, 512 MB RAM, sin Node en el servidor).
 
 ## Reglas
@@ -25,7 +31,7 @@ Todo el contenido y los comentarios van en español.
 - Menú: Inicio · Institucional ▾ · Sedes (`/sedes`) · Sensaciones · Proyectos · Exalumnos · Portal docente. No hay Noticias, Eventos ni página de Contacto:
   el contacto está en el pie de página (`id="contacto"`) y los enlaces `#contacto` bajan hasta él.
 - Sensaciones es el magazine escolar y tiene página propia; sus ediciones están en `EDICIONES`.
-- Portal docente: solo sube PDF investigativos; quedan "pendiente" hasta que el admin aprueba. Hoy es una demo
-  (`frontend/src/lib/demo.ts`, localStorage); se reemplazará por la API.
+- Roles: admin (todo) y docente (sube PDFs y propone proyectos en sus semilleros asignados; queda "pendiente" hasta que
+  el admin aprueba o rechaza con comentario). No hay registro público: el admin crea las cuentas con clave temporal.
 - Imágenes: `alt` en español, `width`/`height` reales, `loading="lazy"` fuera de la primera pantalla. Fotos con rostros de
   estudiantes solo con autorización de los acudientes.

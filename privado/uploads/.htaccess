@@ -1,0 +1,9 @@
+# Archivos subidos: nunca se sirven directamente ni se ejecutan.
+# Se entregan por la API (api/archivo/{id}), que revisa permisos.
+Require all denied
+Options -Indexes -ExecCGI
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .php8 .phar
+RemoveType .php .phtml .php3 .php4 .php5 .php7 .php8 .phar
+<IfModule mod_php.c>
+  php_flag engine off
+</IfModule>

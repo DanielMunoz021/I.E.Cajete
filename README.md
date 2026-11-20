@@ -24,6 +24,14 @@ Sitio institucional de la Institución Educativa Cajete (iecajete.edu.co) con un
 - **Archivos subidos:** quedan fuera de `public_html`, con nombre aleatorio, y se validan por tipo MIME real (`finfo`) y por extensión. `.htaccess` impide ejecutar o servir PHP; se entregan por la API, que revisa permisos.
 - **Salida:** React escapa toda la salida; el HTML que genera PHP (`instalar.php`) usa `htmlspecialchars`.
 
+## Qué hace el portal
+
+| Quién | Qué puede hacer |
+|---|---|
+| **Admin** | Gestiona los usuarios (cuentas con contraseña temporal; las edita, desactiva y restablece). Crea los semilleros y asigna a sus docentes. Gestiona los proyectos, los PDFs y las ediciones de *Sensaciones*. Marca cualquier elemento como **destacado en inicio**, con orden y fecha de fin. Aprueba o rechaza con un comentario lo que envían los docentes (**Pendientes**). |
+| **Docente** | En **Mis semilleros** propone proyectos y sube PDFs, solo en los semilleros que tiene asignados. En **Mis envíos** ve el estado de cada uno y el comentario si fue rechazado, y puede corregirlo y reenviarlo. |
+| **Público** | Ve **/semilleros**, con el detalle de cada uno, sus proyectos y PDFs para ver o descargar. Lee *Sensaciones* (todas las ediciones, con visor de PDF) y los **destacados** del inicio. Solo ve lo aprobado y publicado. |
+
 ## Despliegue en cPanel (GoDaddy)
 
 > Antes de empezar: **haz un backup completo** del WordPress actual (cPanel → Backup) y **activa el certificado SSL** (cPanel → SSL/TLS Status → AutoSSL). Sin SSL, el login no es seguro y el sitio fuerza HTTPS.
@@ -39,7 +47,7 @@ Sitio institucional de la Institución Educativa Cajete (iecajete.edu.co) con un
 3. **Tablas:** cPanel → *phpMyAdmin*:
    - selecciona la base;
    - en *Importar*, carga `database/schema.sql`;
-   - si existe, importa después `database/datos-iniciales.sql`.
+   - después importa `database/datos-iniciales.sql` (las ediciones 1 y 3 de Sensaciones).
 4. **Carpeta privada:** en el *Administrador de archivos*:
    - crea `/home/iecajetepopayan/iecajete-privado/` al mismo nivel que `public_html`, **no dentro**;
    - sube ahí todo el contenido de `privado/`.
@@ -80,14 +88,21 @@ powershell -ExecutionPolicy Bypass -File herramientas\iniciar-local.ps1
 powershell -ExecutionPolicy Bypass -File herramientas\detener-local.ps1
 ```
 
-**Primer admin en local:**
+**Primer admin en local**, si la base está vacía:
 1. Abre http://localhost:5173/api/instalar.php.
 2. Usa la clave que mostró `preparar-local.ps1`; también está en `privado\config.php`.
 
-**Pruebas automáticas de la API.** Corren contra la base **local** y la **vacían** al empezar:
+**Datos de demostración.** Llenan la base local con semilleros, proyectos, PDFs, envíos pendientes y destacados. **Vacían la base local primero:**
 
 ```powershell
-php pruebas\fase-a.php --borrar-datos-locales
+php herramientas\cargar-demo.php --borrar-datos-locales
+# Admin: admin@demo.local / AdminDemo2026 · Docentes: laura@demo.local / LauraDemo2026, pedro@demo.local / PedroDemo2026
+```
+
+**Pruebas automáticas de la API.** Hay 124 pruebas en 5 archivos. Corren contra la base **local** y la **vacían** al empezar:
+
+```powershell
+foreach ($f in 'a','b','c','d','e') { php "pruebas\fase-$f.php" --borrar-datos-locales }
 ```
 
 Abierto con doble clic, `sitio\index.html` muestra las páginas públicas sin servidor. El portal necesita la API.

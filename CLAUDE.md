@@ -19,7 +19,11 @@ Todo el contenido y los comentarios van en español.
   - Toda consulta con `q()/fila()/filas()/valor()` (preparadas). Toda ruta que cambia datos ya pasa por `verificar_csrf()`.
   - Cada ruta empieza con `requerir_login()` o `requerir_admin()`: el permiso se verifica en el servidor, no en la pantalla.
   - Frontend del panel en `frontend/src/panel/` (cliente en `lib/api.ts`, sesión en `lib/sesion.tsx`).
-  - Local: `herramientas\preparar-local.ps1` (una vez) e `iniciar-local.ps1`. Pruebas: `php pruebas\fase-a.php --borrar-datos-locales`.
+  - Local: `herramientas\preparar-local.ps1` (una vez) e `iniciar-local.ps1`. Demo: `php herramientas\cargar-demo.php --borrar-datos-locales`.
+    Pruebas: `php pruebas\fase-{a..e}.php --borrar-datos-locales` (124 pruebas; vacían la base local). Si agregas una ruta, agrégale pruebas.
+  - Archivos subidos: solo con `guardar_subida()` (valida extensión + MIME con finfo) y se sirven por `GET /api/archivo/{id}`.
+  - Contenido de docentes: entra `pendiente` (`revision_inicial()`); lo público filtra `revision = 'aprobado'`. Al borrar algo, `quitar_destacado()`.
+  - Con PDO sin emulación no se puede repetir un parámetro con nombre (`:a` dos veces): usa `?` repetidos.
 - Hosting: GoDaddy Economy compartido (Apache, 512 MB RAM, sin Node en el servidor).
 
 ## Reglas

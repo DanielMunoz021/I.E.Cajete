@@ -37,7 +37,7 @@ export default function DestacadosInicio() {
           const contenido = (
             <>
               {d.imagen ? (
-                <img src={d.imagen} alt="" loading="lazy" className="h-48 w-full object-cover" />
+                <img src={d.imagen} alt="" loading="lazy" className={`h-48 w-full object-cover ${d.tipo === 'edicion' ? 'object-top' : ''}`} />
               ) : (
                 <span className={`flex h-48 items-center justify-center ${i % 2 ? 'bg-yellow-soft' : 'bg-primary-soft text-primary-dark'}`}>
                   <FileText size={48} aria-hidden="true" />

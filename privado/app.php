@@ -69,6 +69,13 @@ $RUTAS = [
     ['POST',   '/ediciones/{id}',                  'sensaciones', 'ruta_ediciones_editar'],
     ['DELETE', '/ediciones/{id}',                  'sensaciones', 'ruta_ediciones_eliminar'],
 
+    // Aprobación de contenido de docentes
+    ['GET',  '/pendientes',                        'revision', 'ruta_pendientes'],
+    ['POST', '/revision/{tipo}/{id}/aprobar',      'revision', 'ruta_revision_aprobar'],
+    ['POST', '/revision/{tipo}/{id}/rechazar',     'revision', 'ruta_revision_rechazar'],
+    ['GET',  '/mis/semilleros',                    'revision', 'ruta_mis_semilleros'],
+    ['GET',  '/mis/envios',                        'revision', 'ruta_mis_envios'],
+
     // Destacados en inicio
     ['POST',   '/destacados',                      'destacados', 'ruta_destacados_alternar'],
     ['GET',    '/admin/destacados',                'destacados', 'ruta_destacados_listar_admin'],

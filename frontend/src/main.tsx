@@ -15,7 +15,9 @@ import PanelLayout from './panel/PanelLayout'
 import Dashboard from './panel/Dashboard'
 import Usuarios from './panel/Usuarios'
 import CambiarClave from './panel/CambiarClave'
-import Proximamente from './panel/Proximamente'
+import Pendientes from './panel/Pendientes'
+import MisSemilleros from './panel/MisSemilleros'
+import MisEnvios from './panel/MisEnvios'
 import Semilleros from './panel/Semilleros'
 import Proyectos from './panel/Proyectos'
 import Documentos from './panel/Documentos'
@@ -57,10 +59,10 @@ createRoot(document.getElementById('root')!).render(
             <Route path="documentos" element={<Documentos />} />
             <Route path="sensaciones" element={<SensacionesAdmin />} />
             <Route path="destacados" element={<Destacados />} />
-            <Route path="pendientes" element={<Proximamente titulo="Pendientes" fase="(e)" />} />
-            <Route path="mis-semilleros" element={<Proximamente titulo="Mis semilleros" fase="(e)" />} />
-            <Route path="mis-envios" element={<Proximamente titulo="Mis envíos" fase="(e)" />} />
-            <Route path="*" element={<Proximamente titulo="Sección no encontrada" fase="—" />} />
+            <Route path="pendientes" element={<Pendientes />} />
+            <Route path="mis-semilleros" element={<MisSemilleros />} />
+            <Route path="mis-envios" element={<MisEnvios />} />
+            <Route path="*" element={<Navigate to="/admin" replace />} />
           </Route>
         </Routes>
       </SesionProvider>

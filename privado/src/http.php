@@ -24,12 +24,15 @@ function error_api(string $mensaje, int $codigo = 400, array $extra = []): never
     responder(['error' => $mensaje] + $extra, $codigo);
 }
 
-/** Cuerpo JSON de la petición como arreglo. */
+/** Datos de la petición: cuerpo JSON, o los campos del formulario si es multipart (subida de archivos). */
 function entrada(): array
 {
     static $datos = null;
     if ($datos !== null) {
         return $datos;
+    }
+    if (str_starts_with((string) ($_SERVER['CONTENT_TYPE'] ?? ''), 'multipart/form-data')) {
+        return $datos = $_POST;
     }
     $crudo = file_get_contents('php://input') ?: '';
     if ($crudo === '') {

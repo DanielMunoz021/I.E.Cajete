@@ -5,7 +5,7 @@ import CabeceraPagina from '../components/CabeceraPagina'
 import NoEncontrada from './NoEncontrada'
 import { INSTITUCION, MENU } from '../data/sitio'
 import {
-  AREAS_PROYECTOS, DIRECTIVOS, DOCENTES, ESCUELA_PADRES, FUNDACION, MANUAL, MISION, OBJETIVOS, OTRAS_SEDES,
+  DIRECTIVOS, DOCENTES, ESCUELA_PADRES, FUNDACION, MANUAL, MISION, OBJETIVOS, OTRAS_SEDES,
   PEI_LEMA, PEI_PDF, RESENA, SEDE_CENTRAL, VISION,
 } from '../data/institucional'
 
@@ -200,21 +200,6 @@ const SECCIONES: Record<string, Seccion> = {
           className="mx-auto w-full max-w-sm rounded-[var(--radius-card)] shadow-[14px_14px_0_var(--color-accent-yellow)]"
         />
       </div>
-    ),
-  },
-  proyectos: {
-    titulo: 'Proyectos y semilleros',
-    antetitulo: 'Investigación',
-    intro: 'Los trabajos investigativos de docentes y estudiantes. Se publican aquí después de la aprobación del administrador.',
-    cuerpo: () => (
-      <ul className="grid gap-5 sm:grid-cols-3">
-        {AREAS_PROYECTOS.map((a, i) => (
-          <li key={a} className={`tarjeta border-t-[6px] p-7 ${i % 2 ? 'border-accent-yellow' : 'border-primary'}`}>
-            <h2 className="text-2xl">{a}</h2>
-            <p className="mt-2 text-muted-text">Todavía no hay trabajos publicados.</p>
-          </li>
-        ))}
-      </ul>
     ),
   },
 }

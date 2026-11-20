@@ -23,6 +23,8 @@ require RAIZ_PRIVADA . '/src/validar.php';
 require RAIZ_PRIVADA . '/src/sesion.php';
 require RAIZ_PRIVADA . '/src/csrf.php';
 require RAIZ_PRIVADA . '/src/auth.php';
+require RAIZ_PRIVADA . '/src/archivos.php';
+require RAIZ_PRIVADA . '/src/contenido.php';
 
 configurar_errores();
 cabeceras_seguridad_api();
@@ -43,6 +45,27 @@ $RUTAS = [
     ['POST', '/usuarios',                          'usuarios', 'ruta_usuarios_crear'],
     ['PUT',  '/usuarios/{id}',                     'usuarios', 'ruta_usuarios_editar'],
     ['POST', '/usuarios/{id}/restablecer-clave',   'usuarios', 'ruta_usuarios_restablecer_clave'],
+
+    // Archivos subidos (con control de permisos)
+    ['GET',  '/archivo/{id}',                      'archivos',   'ruta_archivo'],
+
+    // Semilleros, proyectos y documentos (los formularios con archivos van por POST multipart)
+    ['GET',    '/admin/semilleros',                'semilleros', 'ruta_semilleros_listar_admin'],
+    ['POST',   '/semilleros',                      'semilleros', 'ruta_semilleros_crear'],
+    ['POST',   '/semilleros/{id}',                 'semilleros', 'ruta_semilleros_editar'],
+    ['DELETE', '/semilleros/{id}',                 'semilleros', 'ruta_semilleros_eliminar'],
+    ['GET',    '/admin/proyectos',                 'proyectos',  'ruta_proyectos_listar_admin'],
+    ['POST',   '/proyectos',                       'proyectos',  'ruta_proyectos_crear'],
+    ['POST',   '/proyectos/{id}',                  'proyectos',  'ruta_proyectos_editar'],
+    ['DELETE', '/proyectos/{id}',                  'proyectos',  'ruta_proyectos_eliminar'],
+    ['GET',    '/admin/documentos',                'documentos', 'ruta_documentos_listar_admin'],
+    ['POST',   '/documentos',                      'documentos', 'ruta_documentos_crear'],
+    ['POST',   '/documentos/{id}',                 'documentos', 'ruta_documentos_editar'],
+    ['DELETE', '/documentos/{id}',                 'documentos', 'ruta_documentos_eliminar'],
+
+    // Público
+    ['GET',  '/publico/semilleros',                'semilleros', 'ruta_publico_semilleros'],
+    ['GET',  '/publico/semilleros/{slug}',         'semilleros', 'ruta_publico_semillero'],
 ];
 
 despachar($RUTAS);
@@ -52,11 +75,13 @@ function despachar(array $rutas): void
     $metodo = $_SERVER['REQUEST_METHOD'] ?? 'GET';
     $ruta = ruta_solicitada();
 
+    $existeRuta = false;
     foreach ($rutas as [$m, $patron, $archivo, $funcion]) {
-        $regex = '#^' . str_replace('{id}', '(\d+)', $patron) . '$#';
+        $regex = '#^' . strtr($patron, ['{id}' => '(\d+)', '{slug}' => '([a-z0-9-]+)', '{tipo}' => '(proyecto|documento)']) . '$#';
         if (!preg_match($regex, $ruta, $coincidencias)) {
             continue;
         }
+        $existeRuta = true;
         if ($m !== $metodo) {
             continue;
         }
@@ -65,11 +90,11 @@ function despachar(array $rutas): void
             verificar_csrf();
         }
         require_once RAIZ_PRIVADA . "/rutas/{$archivo}.php";
-        $args = array_map('intval', array_slice($coincidencias, 1));
+        $args = array_map(fn ($a) => ctype_digit($a) ? (int) $a : $a, array_slice($coincidencias, 1));
         $funcion(...$args);
         return;
     }
-    error_api('Ruta no encontrada.', 404);
+    $existeRuta ? error_api('Método no permitido.', 405) : error_api('Ruta no encontrada.', 404);
 }
 
 /** Devuelve la ruta después de /api, por ejemplo "/usuarios/3". */

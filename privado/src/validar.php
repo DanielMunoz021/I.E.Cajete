@@ -52,6 +52,61 @@ function booleano(array $d, string $campo, bool $porDefecto = false): bool
     return filter_var($d[$campo], FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE) ?? $porDefecto;
 }
 
+/** Entero opcional (null si viene vacío). */
+function entero(array $d, string $campo, string $etiqueta, bool $requerido = false, int $min = 0, int $max = PHP_INT_MAX): ?int
+{
+    $v = $d[$campo] ?? null;
+    if ($v === null || $v === '') {
+        if ($requerido) {
+            invalido($campo, "$etiqueta es obligatorio.");
+        }
+        return null;
+    }
+    $n = filter_var($v, FILTER_VALIDATE_INT);
+    if ($n === false || $n < $min || $n > $max) {
+        invalido($campo, "$etiqueta no es válido.");
+    }
+    return $n;
+}
+
+/** Fecha AAAA-MM-DD opcional. */
+function fecha(array $d, string $campo, string $etiqueta, bool $requerido = false): ?string
+{
+    $v = $d[$campo] ?? null;
+    if ($v === null || $v === '') {
+        if ($requerido) {
+            invalido($campo, "$etiqueta es obligatoria.");
+        }
+        return null;
+    }
+    $f = DateTime::createFromFormat('!Y-m-d', (string) $v);
+    if (!$f || $f->format('Y-m-d') !== $v) {
+        invalido($campo, "$etiqueta no es una fecha válida.");
+    }
+    return $v;
+}
+
+/** Lista de enteros (por ejemplo, ids de docentes). Acepta arreglo o "1,2,3". */
+function lista_ids(array $d, string $campo): array
+{
+    $v = $d[$campo] ?? [];
+    if (is_string($v)) {
+        $v = $v === '' ? [] : explode(',', $v);
+    }
+    if (!is_array($v)) {
+        invalido($campo, 'La lista no es válida.');
+    }
+    $ids = [];
+    foreach ($v as $x) {
+        $n = filter_var($x, FILTER_VALIDATE_INT);
+        if ($n === false || $n < 1) {
+            invalido($campo, 'La lista no es válida.');
+        }
+        $ids[] = $n;
+    }
+    return array_values(array_unique($ids));
+}
+
 /** Reglas mínimas de contraseña. */
 function clave_nueva(array $d, string $campo = 'clave'): string
 {

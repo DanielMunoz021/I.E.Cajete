@@ -38,7 +38,7 @@ export default function Footer() {
           <span className="font-bold text-white">Enlaces rápidos</span>
           <Link to="/institucional" className="hover:text-accent-yellow">Institucional</Link>
           <Link to="/sensaciones" className="hover:text-accent-yellow">Sensaciones</Link>
-          <Link to="/proyectos" className="hover:text-accent-yellow">Proyectos y semilleros</Link>
+          <Link to="/semilleros" className="hover:text-accent-yellow">Semilleros</Link>
           <Link to="/portal" className="hover:text-accent-yellow">Portal docente</Link>
         </nav>
         <address className="flex flex-col gap-3 text-[15px] not-italic">

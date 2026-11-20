@@ -41,7 +41,7 @@ export const MENU: ItemMenu[] = [
   },
   { etiqueta: 'Sedes', ruta: '/sedes' },
   { etiqueta: 'Sensaciones', ruta: '/sensaciones' },
-  { etiqueta: 'Proyectos', ruta: '/proyectos' },
+  { etiqueta: 'Semilleros', ruta: '/semilleros' },
   { etiqueta: 'Exalumnos', ruta: '/exalumnos' },
   { etiqueta: 'Portal docente', ruta: '/portal' },
 ]

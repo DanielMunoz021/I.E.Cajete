@@ -28,6 +28,55 @@ function preparar_base_vacia(array $argv): void
     $pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
 }
 
+function pdo_local(): PDO
+{
+    $bd = CONFIG['bd'];
+    return new PDO("mysql:host={$bd['host']};port={$bd['puerto']};dbname={$bd['nombre']};charset=utf8mb4", $bd['usuario'], $bd['clave'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+}
+
+/** Crea un usuario directo en la base (para preparar escenarios) y devuelve su id. */
+function crear_usuario(string $nombre, string $correo, string $clave, string $rol): int
+{
+    $pdo = pdo_local();
+    $pdo->prepare('INSERT INTO usuarios (nombre, correo, rol, clave_hash, debe_cambiar_clave, activo) VALUES (?, ?, ?, ?, 0, 1)')
+        ->execute([$nombre, $correo, $rol, password_hash($clave, PASSWORD_DEFAULT)]);
+    return (int) $pdo->lastInsertId();
+}
+
+/** Cliente ya autenticado. */
+function cliente_con_sesion(string $correo, string $clave): Cliente
+{
+    $c = new Cliente();
+    $c->get('/sesion');
+    $r = $c->post('/login', ['correo' => $correo, 'clave' => $clave]);
+    if ($r['estado'] !== 200) {
+        fwrite(STDERR, "No se pudo iniciar sesión como $correo: {$r['cuerpo']}\n");
+        exit(1);
+    }
+    return $c;
+}
+
+/** Archivos de prueba en una carpeta temporal. */
+function archivos_de_prueba(): array
+{
+    $dir = sys_get_temp_dir() . '/iecajete-pruebas';
+    @mkdir($dir);
+    // PDF mínimo válido
+    $pdf = "%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 200 200]>>endobj\ntrailer<</Root 1 0 R>>\n%%EOF\n";
+    file_put_contents("$dir/informe.pdf", $pdf);
+    file_put_contents("$dir/falso.pdf", "Esto es texto, no un PDF.\n");
+    file_put_contents("$dir/ataque.jpg", "<?php echo 'hackeado'; ?>");
+    $img = imagecreatetruecolor(40, 30);
+    imagefill($img, 0, 0, imagecolorallocate($img, 0, 122, 82));
+    imagepng($img, "$dir/foto.png");
+    return [
+        'pdf'    => ["$dir/informe.pdf", 'application/pdf', 'informe.pdf'],
+        'falso'  => ["$dir/falso.pdf", 'application/pdf', 'falso.pdf'],
+        'ataque' => ["$dir/ataque.jpg", 'image/jpeg', 'ataque.jpg'],
+        'png'    => ["$dir/foto.png", 'image/png', 'foto.png'],
+    ];
+}
+
 final class Cliente
 {
     private string $cookies;

@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, HashRouter, Route, Routes } from 'react-router'
+import { BrowserRouter, HashRouter, Navigate, Route, Routes } from 'react-router'
 import './index.css'
 import Layout from './components/Layout'
 import Inicio from './pages/Inicio'
@@ -16,6 +16,11 @@ import Dashboard from './panel/Dashboard'
 import Usuarios from './panel/Usuarios'
 import CambiarClave from './panel/CambiarClave'
 import Proximamente from './panel/Proximamente'
+import Semilleros from './panel/Semilleros'
+import Proyectos from './panel/Proyectos'
+import Documentos from './panel/Documentos'
+import SemillerosPublico from './pages/Semilleros'
+import SemilleroDetalle from './pages/SemilleroDetalle'
 
 // Abierto con doble clic (file://) se navega con #/ruta; en el hosting, con URLs limpias (/ruta).
 const Router = location.protocol === 'file:' ? HashRouter : BrowserRouter
@@ -32,7 +37,9 @@ createRoot(document.getElementById('root')!).render(
             <Route path="institucional/calendario" element={<Calendario />} />
             <Route path="institucional/:seccion?" element={<PaginaInstitucional />} />
             <Route path="sedes" element={<PaginaInstitucional fija="sedes" />} />
-            <Route path="proyectos" element={<PaginaInstitucional fija="proyectos" />} />
+            <Route path="semilleros" element={<SemillerosPublico />} />
+            <Route path="semilleros/:slug" element={<SemilleroDetalle />} />
+            <Route path="proyectos" element={<Navigate to="/semilleros" replace />} />
             <Route path="exalumnos" element={<Exalumnos />} />
             <Route path="portal" element={<Ingreso />} />
             <Route path="*" element={<NoEncontrada />} />
@@ -43,9 +50,9 @@ createRoot(document.getElementById('root')!).render(
             <Route index element={<Dashboard />} />
             <Route path="usuarios" element={<Usuarios />} />
             <Route path="mi-clave" element={<CambiarClave />} />
-            <Route path="semilleros" element={<Proximamente titulo="Semilleros" fase="(b)" />} />
-            <Route path="proyectos" element={<Proximamente titulo="Proyectos" fase="(b)" />} />
-            <Route path="documentos" element={<Proximamente titulo="Documentos" fase="(b)" />} />
+            <Route path="semilleros" element={<Semilleros />} />
+            <Route path="proyectos" element={<Proyectos />} />
+            <Route path="documentos" element={<Documentos />} />
             <Route path="sensaciones" element={<Proximamente titulo="Sensaciones" fase="(c)" />} />
             <Route path="destacados" element={<Proximamente titulo="Destacados" fase="(d)" />} />
             <Route path="pendientes" element={<Proximamente titulo="Pendientes" fase="(e)" />} />

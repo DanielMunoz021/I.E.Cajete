@@ -4,6 +4,7 @@ import { api, mensajeDeError } from '../lib/api'
 import { Aviso, BotonEliminar, Cargando, ChipRevision, fechaCorta, Modal, TituloPanel, useDatos } from './ui'
 import { tamanoLegible, type DocumentoAdmin, type ProyectoAdmin, type SemilleroAdmin } from './tipos'
 import FormularioDocumento from './FormularioDocumento'
+import InterruptorDestacado from './InterruptorDestacado'
 
 export default function Documentos() {
   const { datos, error, recargar } = useDatos<{ documentos: DocumentoAdmin[] }>('/admin/documentos')
@@ -34,6 +35,7 @@ export default function Documentos() {
               </span>
             </div>
             <ChipRevision revision={d.revision} />
+            {d.revision === 'aprobado' && <InterruptorDestacado tipo="documento" id={d.id} activo={d.destacado} />}
             <div className="flex gap-2">
               <button type="button" onClick={() => setEditando(d)} className="flex items-center gap-1.5 rounded-lg border-[1.5px] border-line px-3 py-2 text-sm font-semibold hover:border-primary-dark" aria-label={`Editar ${d.titulo}`}>
                 <Pencil size={15} aria-hidden="true" /> Editar

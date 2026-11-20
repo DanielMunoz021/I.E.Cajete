@@ -69,7 +69,15 @@ $RUTAS = [
     ['POST',   '/ediciones/{id}',                  'sensaciones', 'ruta_ediciones_editar'],
     ['DELETE', '/ediciones/{id}',                  'sensaciones', 'ruta_ediciones_eliminar'],
 
+    // Destacados en inicio
+    ['POST',   '/destacados',                      'destacados', 'ruta_destacados_alternar'],
+    ['GET',    '/admin/destacados',                'destacados', 'ruta_destacados_listar_admin'],
+    ['POST',   '/destacados/orden',                'destacados', 'ruta_destacados_ordenar'],
+    ['PUT',    '/destacados/{id}',                 'destacados', 'ruta_destacados_editar'],
+    ['DELETE', '/destacados/{id}',                 'destacados', 'ruta_destacados_eliminar'],
+
     // Público
+    ['GET',  '/publico/destacados',                'destacados', 'ruta_publico_destacados'],
     ['GET',  '/publico/ediciones',                 'sensaciones', 'ruta_publico_ediciones'],
     ['GET',  '/publico/semilleros',                'semilleros', 'ruta_publico_semilleros'],
     ['GET',  '/publico/semilleros/{slug}',         'semilleros', 'ruta_publico_semillero'],

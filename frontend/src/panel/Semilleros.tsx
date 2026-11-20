@@ -3,6 +3,7 @@ import { ExternalLink, Pencil, Plus, Sprout } from 'lucide-react'
 import { api, mensajeDeError } from '../lib/api'
 import { Aviso, BotonEliminar, Campo, CampoArchivo, Cargando, Interruptor, Modal, TituloPanel, useDatos } from './ui'
 import type { SemilleroAdmin, UsuarioLista } from './tipos'
+import InterruptorDestacado from './InterruptorDestacado'
 
 export default function Semilleros() {
   const { datos, error, recargar } = useDatos<{ semilleros: SemilleroAdmin[] }>('/admin/semilleros')
@@ -47,6 +48,7 @@ export default function Semilleros() {
               <p className="text-sm text-muted-text">
                 Líder: {s.lider ?? 'sin asignar'} · {s.docentes.length} docente{s.docentes.length === 1 ? '' : 's'} · {s.proyectos} proyecto{s.proyectos === 1 ? '' : 's'}
               </p>
+              <div><InterruptorDestacado tipo="semillero" id={s.id} activo={s.destacado} /></div>
               <div className="mt-auto flex flex-wrap gap-2 pt-3">
                 <button type="button" onClick={() => setEditando(s)} className="flex items-center gap-1.5 rounded-lg border-[1.5px] border-line px-3 py-2 text-sm font-semibold hover:border-primary-dark">
                   <Pencil size={15} aria-hidden="true" /> Editar

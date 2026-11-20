@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { BookOpenText, Pencil, Plus } from 'lucide-react'
 import { api, mensajeDeError } from '../lib/api'
 import { Aviso, BotonEliminar, Campo, CampoArchivo, Cargando, fechaCorta, Interruptor, Modal, TituloPanel, useDatos } from './ui'
+import InterruptorDestacado from './InterruptorDestacado'
 
 export type EdicionAdmin = {
   id: number
@@ -43,6 +44,7 @@ export default function SensacionesAdmin() {
             )}
             <span className="font-semibold">N.º {e.numero} · {e.titulo}</span>
             <span className="-mt-1.5 text-sm text-muted-text">{fechaCorta(e.fecha)}{!e.publicada && ' · Borrador'}</span>
+            {e.publicada && <span><InterruptorDestacado tipo="edicion" id={e.id} activo={e.destacado} /></span>}
             <span className="flex flex-wrap gap-2">
               <button type="button" onClick={() => setEditando(e)} className="flex items-center gap-1 rounded-lg border-[1.5px] border-line px-2.5 py-1.5 text-sm font-semibold hover:border-primary-dark" aria-label={`Editar ${e.titulo}`}>
                 <Pencil size={14} aria-hidden="true" /> Editar

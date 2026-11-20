@@ -4,6 +4,7 @@ import { api, mensajeDeError } from '../lib/api'
 import { Aviso, BotonEliminar, Cargando, ChipRevision, Modal, TituloPanel, useDatos } from './ui'
 import type { ProyectoAdmin, SemilleroAdmin } from './tipos'
 import FormularioProyecto from './FormularioProyecto'
+import InterruptorDestacado from './InterruptorDestacado'
 
 export default function Proyectos() {
   const { datos, error, recargar } = useDatos<{ proyectos: ProyectoAdmin[] }>('/admin/proyectos')
@@ -53,7 +54,12 @@ export default function Proyectos() {
                   </td>
                   <td className="px-5 py-3.5">{p.semillero}</td>
                   <td className="px-5 py-3.5">{p.anio ?? '—'}</td>
-                  <td className="px-5 py-3.5"><ChipRevision revision={p.revision} /></td>
+                  <td className="px-5 py-3.5">
+                    <div className="flex flex-col items-start gap-2">
+                      <ChipRevision revision={p.revision} />
+                      {p.revision === 'aprobado' && <InterruptorDestacado tipo="proyecto" id={p.id} activo={p.destacado} />}
+                    </div>
+                  </td>
                   <td className="px-5 py-3.5">
                     <div className="flex justify-end gap-2">
                       <button type="button" onClick={() => setEditando(p)} className="flex items-center gap-1.5 rounded-lg border-[1.5px] border-line px-3 py-2 font-semibold hover:border-primary-dark" aria-label={`Editar ${p.titulo}`}>

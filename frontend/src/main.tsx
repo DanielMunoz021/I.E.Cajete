@@ -20,6 +20,7 @@ import Semilleros from './panel/Semilleros'
 import Proyectos from './panel/Proyectos'
 import Documentos from './panel/Documentos'
 import SensacionesAdmin from './panel/SensacionesAdmin'
+import Destacados from './panel/Destacados'
 import SemillerosPublico from './pages/Semilleros'
 import SemilleroDetalle from './pages/SemilleroDetalle'
 
@@ -55,7 +56,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="proyectos" element={<Proyectos />} />
             <Route path="documentos" element={<Documentos />} />
             <Route path="sensaciones" element={<SensacionesAdmin />} />
-            <Route path="destacados" element={<Proximamente titulo="Destacados" fase="(d)" />} />
+            <Route path="destacados" element={<Destacados />} />
             <Route path="pendientes" element={<Proximamente titulo="Pendientes" fase="(e)" />} />
             <Route path="mis-semilleros" element={<Proximamente titulo="Mis semilleros" fase="(e)" />} />
             <Route path="mis-envios" element={<Proximamente titulo="Mis envíos" fase="(e)" />} />

@@ -5,6 +5,7 @@ import { useEdiciones } from '../lib/ediciones'
 import { Portada } from './Sensaciones'
 import { ALIADOS, DIRECTIVOS, DISTINTIVOS, FUNDACION, NIVELES, RESENA } from '../data/institucional'
 import CarruselPortada from '../components/CarruselPortada'
+import DestacadosInicio from '../components/DestacadosInicio'
 import { irAContacto } from '../lib/navegacion'
 
 // Colores de las tarjetas de niveles: verde, amarillo y celeste del escudo (texto siempre con contraste AA).
@@ -71,6 +72,9 @@ export default function Inicio() {
           ))}
         </div>
       </section>
+
+      {/* DESTACADOS (los marca el admin en el panel) */}
+      <DestacadosInicio />
 
       {/* ACCESOS RÁPIDOS */}
       <section className="contenedor mt-22">

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // En el hosting, las rutas relativas (img/..., docs/...) se resuelven desde la raíz del sitio,
+      // aunque la URL sea /institucional/sedes. Abierto con doble clic (file://) se resuelven desde esta carpeta.
+      if (location.protocol !== 'file:') document.write('<base href="/" />')
+    </script>
+    <meta name="description" content="Sitio oficial de la Institución Educativa Cajete, Popayán, Cauca. Ciencia · Trabajo · Virtud · Progreso." />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Montserrat:wght@500;600&family=Outfit:wght@400;500&display=swap" rel="stylesheet" />
+    <title>Institución Educativa Cajete</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

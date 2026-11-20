@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+/*
+  Tokens de color = colores del escudo de IE Cajete.
+  Contraste (WCAG AA):
+  - Texto blanco solo sobre primary-dark (#007A52, 5.4:1). Sobre primary (#009F6B) da 3.4:1: no usar para texto normal.
+  - Amarillo y celeste solo como fondo de etiquetas, con texto oscuro encima.
+  - topbar (#FBC02D) es el amarillo de la franja del sitio anterior; lleva texto oscuro.
+*/
+@theme {
+  --color-primary: #009f6b;
+  --color-primary-dark: #007a52;
+  --color-primary-darker: #005c3e;
+  --color-primary-soft: #e6f5ef;
+  --color-secondary: #00b00b;
+  --color-accent-yellow: #ffef00;
+  --color-yellow-soft: #fffbdd; /* tinte del amarillo del escudo para fondos de sección */
+  --color-accent-sky: #00c8ff;
+  --color-sky-soft: #e5f9ff;
+  --color-sky-text: #00586f;
+  --color-topbar: #fbc02d;
+  --color-foreground: #171717;
+  --color-body: #3a3a3a;
+  --color-muted-text: #555555;
+  --color-background: #ffffff;
+  --color-muted: #f5f5f5;
+  --color-line: #eaeaea;
+  --color-danger: #9a1c14;
+  --color-danger-soft: #fdecec;
+
+  --font-display: "Outfit", system-ui, sans-serif;
+  --font-sans: "Figtree", system-ui, sans-serif;
+  --font-menu: "Montserrat", system-ui, sans-serif;
+
+  --radius-card: 0.85rem;
+  --shadow-card: 0 10px 30px rgb(0 122 82 / 0.12);
+  --shadow-soft: 0 4px 14px rgb(0 122 82 / 0.07);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display font-normal;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-primary-dark);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer components {
+  .contenedor {
+    @apply mx-auto w-full max-w-[1240px] px-4 sm:px-6;
+  }
+  .btn-primario {
+    @apply inline-flex items-center gap-2 rounded-xl bg-primary-dark px-5 py-3 font-semibold text-white shadow-[0_6px_16px_rgb(0_122_82/0.3)] transition-colors hover:bg-primary-darker;
+  }
+  .btn-secundario {
+    @apply inline-flex items-center gap-2 rounded-xl border-[1.5px] border-primary-dark bg-white px-5 py-[11px] font-semibold text-primary-dark transition-colors hover:bg-primary-soft;
+  }
+  /* Botón amarillo: siempre con texto oscuro (el amarillo nunca va como texto sobre blanco) */
+  .btn-amarillo {
+    @apply inline-flex items-center gap-2 rounded-xl bg-accent-yellow px-5 py-3 font-semibold text-foreground shadow-[0_6px_16px_rgb(251_192_45/0.35)] transition-colors hover:bg-topbar;
+  }
+  /* Franja de marca: verde + amarillo (bajo el encabezado y sobre el pie) */
+  .franja-marca {
+    @apply flex h-1.5;
+    background: linear-gradient(90deg, var(--color-primary) 0 70%, var(--color-accent-yellow) 70% 100%);
+  }
+  /* Barrita amarilla bajo los títulos de sección */
+  .con-barra::after,
+  .titulo-seccion::after {
+    content: '';
+    display: block;
+    width: 4rem;
+    height: 6px;
+    margin-top: 0.65rem;
+    border-radius: 3px;
+    background: var(--color-accent-yellow);
+  }
+  .etiqueta {
+    @apply inline-block rounded-full px-3 py-1 text-[13px] font-bold text-foreground;
+  }
+  .tarjeta {
+    @apply rounded-[var(--radius-card)] bg-white shadow-[var(--shadow-card)];
+  }
+  .titulo-seccion {
+    @apply font-display text-3xl sm:text-4xl;
+  }
+  .campo {
+    @apply rounded-[10px] border-[1.5px] border-[#D4D4D4] bg-white px-3.5 py-3 font-sans text-base font-normal text-foreground focus:border-primary-dark;
+  }
+  .validar {
+    @apply rounded bg-accent-yellow/60 px-1 font-semibold text-foreground;
+  }
+}
